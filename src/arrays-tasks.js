@@ -76,14 +76,13 @@ function findElement(arr, value) {
  *    findAllOccurrences([ null, undefined, null ], null) => 2
  *    findAllOccurrences([ true, 0, 1, 'true' ], true) => 1
  */
-function findAllOccurrences(arr, value) {
-  const indexes = [];
-  arr.forEach((element, index) => {
-    if (element === value) {
-      indexes.push(index);
+function findAllOccurrences(arr, item) {
+  return arr.reduce((occur, elem) => {
+    if (elem === item) {
+      return occur + 1;
     }
-  });
-  return indexes;
+    return occur;
+  }, 0);
 }
 
 /**
@@ -131,11 +130,11 @@ function getStringsLength(arr) {
  *   getAverage([ 2, 3, 3 ])  => 2,67
  */
 function getAverage(arr) {
-  let sum = 0;
-  arr.forEach((i) => {
-    sum += i;
-  });
-  return Math.floor(sum / arr.length);
+  if (arr.length) {
+    const average = arr.reduce((acc, curr) => acc + curr, 0) / arr.length;
+    return +average.toFixed(2);
+  }
+  return 0;
 }
 
 /**
@@ -276,10 +275,10 @@ function distinct(arr) {
  *    createNDimensionalArray(1, 1) => [0]
  */
 function createNDimensionalArray(n, size) {
-  if (n !== 1) {
-    return Array.from({ length: size })(createNDimensionalArray(n - 1, size));
+  if (n === 1) {
+    return Array(size).fill(0);
   }
-  return Array.from({ length: size }).fill(0);
+  return Array(size).fill(createNDimensionalArray(n - 1, size));
 }
 
 /**
@@ -347,11 +346,9 @@ function calculateBalance(arr) {
  *    createChunks([10, 20, 30, 40, 50], 1) => [[10], [20], [30], [40], [50]]
  */
 function createChunks(arr, chunkSize) {
-  const chunkArray = [];
-  for (let i = 0; i < arr.length; i += chunkSize) {
-    chunkArray.push(arr.slice(i, i + chunkSize));
-  }
-  return chunkArray;
+  return Array.from({ length: Math.ceil(arr.length / chunkSize) }, (_, index) =>
+    arr.slice(index * chunkSize, (index + 1) * chunkSize)
+  );
 }
 
 /**
@@ -367,13 +364,7 @@ function createChunks(arr, chunkSize) {
  *    generateOdds(5) => [ 1, 3, 5, 7, 9 ]
  */
 function generateOdds(len) {
-  const oddsArray = [];
-  for (let i = 1; i <= len * 2; i += 1) {
-    if (i % 2 !== 0) {
-      oddsArray.push(i);
-    }
-  }
-  return oddsArray;
+  return Array.from({ length: len }, (_, index) => 2 * index + 1);
 }
 
 /**
